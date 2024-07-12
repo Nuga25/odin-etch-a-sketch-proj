@@ -2,7 +2,7 @@ const gridContainer = document.querySelector("#container");
 
 function createGrid(numberOfGrid){
     gridContainer.textContent = "";
-
+    
     //calculate size of each gridItem based on numberOfGrid
     const containerWidth = gridContainer.offsetWidth;
     const gridItemSize = containerWidth / numberOfGrid;
@@ -12,9 +12,15 @@ function createGrid(numberOfGrid){
         gridItem.className = "grid-item";
         gridItem.style.width = `${size}px`;
         gridItem.style.height = `${size}px`;
+        gridItem.style.backgroundColor = "white";
+        gridItem.style.opacity = "0.1"; // Set initial opacity to 10%
 
-        //change background color of gridItem on mouse hover
+        // Add event listener to change opacity and background color on hover
         gridItem.addEventListener("mouseover", (event) => {
+            let currentOpacity = parseFloat(event.target.style.opacity);
+            if (currentOpacity < 1) {
+                event.target.style.opacity = (currentOpacity + 0.1).toString();
+            }
             event.target.style.backgroundColor = generateRandomColor();
         });
 

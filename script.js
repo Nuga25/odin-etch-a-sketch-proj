@@ -1,32 +1,62 @@
 const gridContainer = document.querySelector("#container");
-let numberOfGrid = 16;
+
+function createGrid(numberOfGrid){
+    gridContainer.textContent = "";
+
+    //calculate size of each gridItem based on numberOfGrid
+    const containerWidth = gridContainer.offsetWidth;
+    const gridItemSize = containerWidth / numberOfGrid;
+
+    function createGridItem(size){
+        let gridItem =  document.createElement("div");
+        gridItem.className = "grid-item";
+        gridItem.style.width = `${size}px`;
+        gridItem.style.height = `${size}px`;
+
+        //change background color of gridItem on mouse hover
+        gridItem.addEventListener("mouseover", (event) => {
+            event.target.style.backgroundColor = generateRandomColor();
+        });
+
+        return gridItem;
+    }
+
+    //have equal number of grid on each row
+    let currentRow;
+    for(let i = 0; i < numberOfGrid * numberOfGrid; i++){
+        if(i % numberOfGrid === 0){
+            currentRow = document.createElement("div");
+            currentRow.className = "row";
+            gridContainer.appendChild(currentRow);
+        }
+        currentRow.appendChild(createGridItem(gridItemSize));
+    }
+}
 
 const button = document.querySelector("button");
 button.addEventListener("click",() => {
-    let number = prompt("Enter number of grid(1 to 100)", 16);
-    numberOfGrid = number;
+    let numberOfGrid;
+    let number = prompt("Enter number of grid(1 to 100)");
+    if(number < 1 || number > 100){
+        alert("Invalid! Select a number between 1 and 100.");
+        numberOfGrid = 16;
+    }else{
+        numberOfGrid = number;
+    }
+
+    createGrid(numberOfGrid);
 })
 
-//calculate size of each gridItem based on numberOfGrid
-const containerWidth = gridContainer.offsetWidth;
-const gridItemSize = containerWidth / numberOfGrid;
+// Create a default 16x16 grid on page load
+document.addEventListener("DOMContentLoaded", () => {
+    createGrid(16);
+});
 
-function createGridItem(size){
-    const gridItem =  document.createElement("div");
-    gridItem.className = "grid-item";
-    gridItem.style.width = `${size}px`;
-    gridItem.style.height = `${size}px`;
-    return gridItem;
+//generate random colors as mouse hovers
+function generateRandomColor(){
+    const r = Math.floor(Math.random() * 156 + 100);//Generate random between 100  and 255
+    const g = Math.floor(Math.random() * 156 + 100);
+    const b = Math.floor(Math.random() * 156 + 100);
+
+    return `rgb(${r}, ${g}, ${b})`;
 }
-
-let currentRow;
-for(let i = 0; i < numberOfGrid * numberOfGrid; i++){
-    if(i % numberOfGrid === 0){
-        currentRow = document.createElement("div");
-        currentRow.className = "row";
-        gridContainer.appendChild(currentRow);
-    }
-    currentRow.appendChild(createGridItem(gridItemSize));
-}
-
-
